@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WARNING</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+      animation: glitch 0.3s infinite;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    @keyframes glitch {
+      0% { background-color: #000; }
+      50% { background-color: #111; }
+      100% { background-color: #000; }
+    }
+
+    .popup {
+      position: absolute;
+      width: 600px;
+      background-color: #e0e0e0;
+      border: 2px solid #000;
+      box-shadow: 8px 8px 0px #000;
+      z-index: 9999;
+    }
+
+    .title-bar {
+      background-color: navy;
+      color: white;
+      padding: 6px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .title-bar button {
+      background-color: red;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      width: 25px;
+      height: 25px;
+    }
+
+    .message {
+      padding: 20px;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .buttons {
+      padding: 10px;
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .buttons button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #boss {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      width: 100px;
+      display: none;
+      animation: laugh 0.5s steps(2) infinite;
+    }
+
+    @keyframes laugh {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+  </style>
+</head>
+<body>
+  <img id="boss" src="boss_laughing.gif" alt="Boss" />
+  <audio id="errorSound" src="error.mp3" preload="auto"></audio>
+  <audio id="laughSound" src="laugh.mp3" preload="auto" loop></audio>
+
+  <script>
+    const errorSound = document.getElementById("errorSound");
+    const laughSound = document.getElementById("laughSound");
+
+    function createPopup() {
+      const popup = document.createElement("div");
+      popup.className = "popup";
+      popup.style.top = Math.random() * (window.innerHeight - 200) + "px";
+      popup.style.left = Math.random() * (window.innerWidth - 600) + "px";
+
+      popup.innerHTML = \`
+        <div class="title-bar">
+          <span>System Error</span>
+          <button onclick="this.closest('.popup').remove()">X</button>
+        </div>
+        <div class="message">⚠️ <strong>WARNING! LXM0N IS COMING!!</strong></div>
+        <div class="buttons">
+          <button onclick="alert('OK clicked')">OK</button>
+          <button onclick="alert('Cancel clicked')">Cancel</button>
+        </div>
+      \`;
+
+      document.body.appendChild(popup);
+      errorSound.currentTime = 0;
+      errorSound.play();
+    }
+
+    function spamPopups(speed) {
+      createPopup();
+      setTimeout(() => spamPopups(speed * 0.95), speed);
+    }
+
+    setTimeout(() => {
+      document.getElementById("boss").style.display = "block";
+      laughSound.play();
+    }, 20000);
+
+    spamPopups(1200);
+  </script>
+</body>
+</html>
